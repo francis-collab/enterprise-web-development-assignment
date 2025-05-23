@@ -1,6 +1,6 @@
 import unittest
-from sparse_matrix import SparseMatrix
-from matrix_operations import add_matrices, subtract_matrices, multiply_matrices
+from dsa.sparse_matrix.code.src.sparse_matrix import SparseMatrix
+from dsa.sparse_matrix.code.src.matrix_operations import add_matrices, subtract_matrices, multiply_matrices
 
 class TestMatrixOperations(unittest.TestCase):
     def setUp(self):

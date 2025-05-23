@@ -1,7 +1,7 @@
 import unittest
 import os
-from file_handler import read_matrix_from_file, write_matrix_to_file
-from sparse_matrix import SparseMatrix
+from dsa.sparse_matrix.code.src.file_handler import read_matrix_from_file, write_matrix_to_file
+from dsa.sparse_matrix.code.src.sparse_matrix import SparseMatrix
 
 class TestFileHandler(unittest.TestCase):
     def setUp(self):

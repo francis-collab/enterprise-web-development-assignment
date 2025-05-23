@@ -1,5 +1,5 @@
 import unittest
-from sparse_matrix import SparseMatrix
+from dsa.sparse_matrix.code.src.sparse_matrix import SparseMatrix
 
 class TestSparseMatrix(unittest.TestCase):
     def setUp(self):
