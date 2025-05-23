@@ -5,7 +5,7 @@ from sparse_matrix import SparseMatrix
 def read_matrix_from_file(file_path: str) -> SparseMatrix:
     try:
         with open(file_path, 'r') as f:
-            lines = [line.strip() for line in f if line.strip()]
+            lines = [line.strip() for line in f if line.strip()]  # Ignore empty lines
     except FileNotFoundError:
         raise FileNotFoundError(f"File not found: {file_path}")
 
@@ -35,7 +35,7 @@ def read_matrix_from_file(file_path: str) -> SparseMatrix:
         except ValueError:
             raise ValueError("Input file has wrong format: entries must be integers")
 
-        if row < 0 or row >= numRows or col < 0 or col >= numCols:
+        if row < 0 or row >= numRows or col < 0 or col > numCols - 1:
             raise IndexError(f"Row or Column index out of bounds: ({row}, {col})")
 
         matrix.setElement(row, col, val)
@@ -44,8 +44,11 @@ def read_matrix_from_file(file_path: str) -> SparseMatrix:
 
 
 def write_matrix_to_file(matrix: SparseMatrix, file_path: str):
-    with open(file_path, 'w') as f:
-        f.write(f"rows={matrix.numRows}\n")
-        f.write(f"cols={matrix.numCols}\n")
-        for row, col, val in matrix.getAllElements():
-            f.write(f"({row}, {col}, {val})\n")
+    try:
+        with open(file_path, 'w') as f:
+            f.write(f"rows={matrix.numRows}\n")
+            f.write(f"cols={matrix.numCols}\n")
+            for row, col, val in matrix.getAllElements():
+                f.write(f"({row}, {col}, {val})\n")
+    except Exception as e:
+        raise IOError(f"Error writing matrix to file: {e}")
