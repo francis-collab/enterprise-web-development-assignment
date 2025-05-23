@@ -1,5 +1,3 @@
-# file_handler.py
-
 from sparse_matrix import SparseMatrix
 
 def read_matrix_from_file(file_path: str) -> SparseMatrix:
@@ -23,7 +21,7 @@ def read_matrix_from_file(file_path: str) -> SparseMatrix:
     for line in lines[2:]:
         line = line.strip()
         if not line:
-            continue  # Skip empty lines
+            continue
 
         if not (line.startswith('(') and line.endswith(')')):
             raise ValueError("Input file has wrong format: missing valid parentheses")
@@ -38,6 +36,16 @@ def read_matrix_from_file(file_path: str) -> SparseMatrix:
             val = int(contents[2].strip())
         except ValueError:
             raise ValueError("Input file has wrong format: entries must be integers")
+
+        row -= 1
+        col -= 1
+
+        print(f"Parsed indices (before adjusting): row={row+1}, col={col+1}")
+        print(f"Adjusted indices (0-based): row={row}, col={col}")
+        print(f"Matrix dimensions: rows={numRows}, cols={numCols}")
+
+        if row < 0 or row >= numRows or col < 0 or col >= numCols:
+            raise IndexError(f"Row or Column index out of bounds: ({row+1}, {col+1})")
 
         matrix.setElement(row, col, val)
 
