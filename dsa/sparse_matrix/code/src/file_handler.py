@@ -5,43 +5,45 @@ from dsa.sparse_matrix.code.src.sparse_matrix import SparseMatrix
 def read_matrix_from_file(file_path: str) -> SparseMatrix:
     try:
         with open(file_path, 'r') as f:
-            lines = [line.strip() for line in f if line.strip()]  # Ignore empty lines
+            numRows = None
+            numCols = None
+            matrix = None
+
+            for i, line in enumerate(f):  # ✅ Stream file instead of loading entirely
+                line = line.strip()
+                if not line:
+                    continue  # Ignore empty lines
+
+                if i == 0:
+                    numRows = int(line.split('=')[1].strip())
+                elif i == 1:
+                    numCols = int(line.split('=')[1].strip())
+                    matrix = SparseMatrix(numRows, numCols)
+                else:
+                    if not (line.startswith('(') and line.endswith(')')):
+                        raise ValueError("Input file has wrong format: missing valid parentheses")
+
+                    contents = line[1:-1].split(',')
+                    if len(contents) != 3:
+                        raise ValueError("Input file has wrong format: coordinate entry invalid")
+
+                    try:
+                        row = int(contents[0].strip())
+                        col = int(contents[1].strip())
+                        val = int(contents[2].strip())
+                    except ValueError:
+                        raise ValueError("Input file has wrong format: entries must be integers")
+
+                    # ✅ Column index validation fix
+                    if row < 0 or row >= numRows or col < 0 or col > numCols - 1:
+                        raise IndexError(f"Row or Column index out of bounds: ({row}, {col}). Expected range: 0 to {numCols - 1}")
+
+                    matrix.setElement(row, col, val)
+
+            return matrix
+
     except FileNotFoundError:
         raise FileNotFoundError(f"File not found: {file_path}")
-
-    if len(lines) < 2:
-        raise ValueError("Input file is too short or missing rows/cols definition")
-
-    try:
-        numRows = int(lines[0].split('=')[1].strip())
-        numCols = int(lines[1].split('=')[1].strip())
-    except Exception:
-        raise ValueError("Invalid rows/cols format")
-
-    matrix = SparseMatrix(numRows, numCols)
-
-    for line in lines[2:]:
-        if not (line.startswith('(') and line.endswith(')')):
-            raise ValueError("Input file has wrong format: missing valid parentheses")
-
-        contents = line[1:-1].split(',')
-        if len(contents) != 3:
-            raise ValueError("Input file has wrong format: coordinate entry invalid")
-
-        try:
-            row = int(contents[0].strip())
-            col = int(contents[1].strip())
-            val = int(contents[2].strip())
-        except ValueError:
-            raise ValueError("Input file has wrong format: entries must be integers")
-
-        # ✅ Corrected Column Index Validation
-        if row < 0 or row >= numRows or col < 0 or col > numCols - 1:
-            raise IndexError(f"Row or Column index out of bounds: ({row}, {col}). Expected column index range: 0 to {numCols - 1}")
-
-        matrix.setElement(row, col, val)
-
-    return matrix
 
 
 def write_matrix_to_file(matrix: SparseMatrix, file_path: str):
