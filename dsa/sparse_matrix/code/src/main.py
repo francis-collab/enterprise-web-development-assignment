@@ -7,9 +7,8 @@ import sys
 def main():
     sample_inputs = [
         "easy_sample_01_2.txt",
-        "matrixA.txt",
-        "matrixB.txt",
-        # Add any other sample input filenames here manually
+        "easy_sample_01_3.txt",
+        # Add more input files here manually if needed
     ]
 
     print("Available sample input files:")
@@ -22,8 +21,8 @@ def main():
         if idx1 < 1 or idx1 > len(sample_inputs) or idx2 < 1 or idx2 > len(sample_inputs):
             print("Invalid file selection numbers.")
             return
-        input_path_A = f"dsa/sparse_matrix/sample_inputs/{sample_inputs[idx1 - 1]}"
-        input_path_B = f"dsa/sparse_matrix/sample_inputs/{sample_inputs[idx2 - 1]}"
+        input_path_A = f"../../sample_inputs/{sample_inputs[idx1 - 1]}"
+        input_path_B = f"../../sample_inputs/{sample_inputs[idx2 - 1]}"
     except ValueError:
         print("Invalid input; please enter valid numbers.")
         return
@@ -45,13 +44,13 @@ def main():
     try:
         if choice == "1":
             result = add_matrices(matrixA, matrixB)
-            output_file = "dsa/sparse_matrix/sample_outputs/sum_matrix.txt"
+            output_file = "../../sample_outputs/sum_matrix.txt"
         elif choice == "2":
             result = subtract_matrices(matrixA, matrixB)
-            output_file = "dsa/sparse_matrix/sample_outputs/diff_matrix.txt"
+            output_file = "../../sample_outputs/diff_matrix.txt"
         elif choice == "3":
             result = multiply_matrices(matrixA, matrixB)
-            output_file = "dsa/sparse_matrix/sample_outputs/prod_matrix.txt"
+            output_file = "../../sample_outputs/prod_matrix.txt"
         else:
             print("Invalid choice.")
             return
