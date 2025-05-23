@@ -22,7 +22,7 @@ tests/            → Unit tests for validation
 
 ```sh
 # Run the main program
-python main.py
+python3 -m dsa.sparse_matrix.code.src.main
 ```
 
 Then, select an operation (addition, subtraction, multiplication).
@@ -30,7 +30,7 @@ Then, select an operation (addition, subtraction, multiplication).
 ## Testing the Code
 
 ```sh
-python -m unittest discover -s tests
+python3 -m unittest discover dsa/sparse_matrix/tests/
 ```
 
 This runs all unit tests to verify correctness.
