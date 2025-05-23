@@ -1,40 +1,56 @@
-def add_matrices(matrix1, matrix2):
-    if matrix1.rows != matrix2.rows or matrix1.cols != matrix2.cols:
-        raise ValueError("Matrices must have the same dimensions for addition.")
+# matrix_operations.py
 
-    result = SparseMatrix(matrix1.rows, matrix1.cols)
-    for (row, col), value in matrix1.matrix.items():
-        result.matrix[(row, col)] = value
+from sparse_matrix import SparseMatrix
 
-    for (row, col), value in matrix2.matrix.items():
-        result.matrix[(row, col)] = result.get_element(row, col) + value
+def add_matrices(m1: SparseMatrix, m2: SparseMatrix) -> SparseMatrix:
+    if m1.numRows != m2.numRows or m1.numCols != m2.numCols:
+        raise ValueError("Matrix dimensions must match for addition")
 
-    return result
+    result = SparseMatrix(m1.numRows, m1.numCols)
 
-def subtract_matrices(matrix1, matrix2):
-    if matrix1.rows != matrix2.rows or matrix1.cols != matrix2.cols:
-        raise ValueError("Matrices must have the same dimensions for subtraction.")
+    for row, col, val in m1.getAllElements():
+        result.setElement(row, col, val)
 
-    result = SparseMatrix(matrix1.rows, matrix1.cols)
-    for (row, col), value in matrix1.matrix.items():
-        result.matrix[(row, col)] = value
-
-    for (row, col), value in matrix2.matrix.items():
-        result.matrix[(row, col)] = result.get_element(row, col) - value
+    for row, col, val in m2.getAllElements():
+        prev_val = result.getElement(row, col)
+        result.setElement(row, col, prev_val + val)
 
     return result
 
-def multiply_matrices(matrix1, matrix2):
-    if matrix1.cols != matrix2.rows:
-        raise ValueError("Invalid matrix dimensions for multiplication.")
 
-    result = SparseMatrix(matrix1.rows, matrix2.cols)
+def subtract_matrices(m1: SparseMatrix, m2: SparseMatrix) -> SparseMatrix:
+    if m1.numRows != m2.numRows or m1.numCols != m2.numCols:
+        raise ValueError("Matrix dimensions must match for subtraction")
 
-    for (rowA, colA), valueA in matrix1.matrix.items():
-        for colB in range(matrix2.cols):
-            valueB = matrix2.get_element(colA, colB)
-            if valueB != 0:
-                result.matrix[(rowA, colB)] = result.get_element(rowA, colB) + (valueA * valueB)
+    result = SparseMatrix(m1.numRows, m1.numCols)
+
+    for row, col, val in m1.getAllElements():
+        result.setElement(row, col, val)
+
+    for row, col, val in m2.getAllElements():
+        prev_val = result.getElement(row, col)
+        result.setElement(row, col, prev_val - val)
 
     return result
 
+
+def multiply_matrices(m1: SparseMatrix, m2: SparseMatrix) -> SparseMatrix:
+    if m1.numCols != m2.numRows:
+        raise ValueError("Matrix A columns must match Matrix B rows for multiplication")
+
+    result = SparseMatrix(m1.numRows, m2.numCols)
+
+    # Build a quick-access map for B
+    b_map = {}
+    for row, col, val in m2.getAllElements():
+        if row not in b_map:
+            b_map[row] = []
+        b_map[row].append((col, val))
+
+    for a_row, a_col, a_val in m1.getAllElements():
+        if a_col in b_map:
+            for b_col, b_val in b_map[a_col]:
+                prev_val = result.getElement(a_row, b_col)
+                result.setElement(a_row, b_col, prev_val + a_val * b_val)
+
+    return result

@@ -1,39 +1,62 @@
+# sparse_matrix.py
+
+class Node:
+    def __init__(self, row, col, value, next=None):
+        self.row = row
+        self.col = col
+        self.value = value
+        self.next = next
+
+
 class SparseMatrix:
-    def __init__(self, file_path):
-        self.matrix = {}  # Stores (row, col) -> value
-        self.rows = 0
-        self.cols = 0
-        self.load_from_file(file_path)
+    def __init__(self, numRows, numCols):
+        self.numRows = numRows
+        self.numCols = numCols
+        self.head = None
 
-    def load_from_file(self, file_path):
-        try:
-            with open(file_path, 'r') as file:
-                lines = [line.strip() for line in file.readlines() if line.strip()]  # Ignore empty lines
+    def setElement(self, row, col, value):
+        if row >= self.numRows or col >= self.numCols:
+            raise IndexError("Row or Column index out of bounds")
 
-                # Validate format
-                if not lines[0].startswith("rows=") or not lines[1].startswith("cols="):
-                    raise ValueError("Input file has wrong format")
+        # Update or insert
+        prev = None
+        curr = self.head
 
-                self.rows = int(lines[0].split('=')[1])
-                self.cols = int(lines[1].split('=')[1])
+        while curr:
+            if curr.row == row and curr.col == col:
+                if value == 0:
+                    if prev:
+                        prev.next = curr.next
+                    else:
+                        self.head = curr.next
+                    return
+                else:
+                    curr.value = value
+                    return
+            elif (curr.row > row) or (curr.row == row and curr.col > col):
+                break
+            prev = curr
+            curr = curr.next
 
-                for line in lines[2:]:
-                    if not (line.startswith("(") and line.endswith(")")):
-                        raise ValueError("Input file has wrong format")
-                    row, col, value = map(int, line[1:-1].split(','))  # Extract data
-                    self.matrix[(row, col)] = value
+        if value != 0:
+            new_node = Node(row, col, value, curr)
+            if prev:
+                prev.next = new_node
+            else:
+                self.head = new_node
 
-        except FileNotFoundError:
-            raise FileNotFoundError(f"Error: File '{file_path}' not found.")
-        except Exception as e:
-            raise ValueError(f"Error loading matrix: {e}")
+    def getElement(self, row, col):
+        curr = self.head
+        while curr:
+            if curr.row == row and curr.col == col:
+                return curr.value
+            curr = curr.next
+        return 0
 
-    def get_element(self, row, col):
-        return self.matrix.get((row, col), 0)  # Default to zero if absent
-
-    def set_element(self, row, col, value):
-        if value == 0 and (row, col) in self.matrix:
-            del self.matrix[(row, col)]  # Remove zero entries to save memory
-        elif value != 0:
-            self.matrix[(row, col)] = value
-
+    def getAllElements(self):
+        elements = []
+        curr = self.head
+        while curr:
+            elements.append((curr.row, curr.col, curr.value))
+            curr = curr.next
+        return elements
