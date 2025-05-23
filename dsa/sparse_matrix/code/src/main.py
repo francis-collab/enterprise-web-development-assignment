@@ -1,7 +1,7 @@
 # main.py
 
-from file_handler import read_matrix_from_file, write_matrix_to_file
-from matrix_operations import add_matrices, subtract_matrices, multiply_matrices
+from src.ile_handler import read_matrix_from_file, write_matrix_to_file
+from src.matrix_operations import add_matrices, subtract_matrices, multiply_matrices
 import sys
 
 def main():
