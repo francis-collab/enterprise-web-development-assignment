@@ -35,8 +35,9 @@ def read_matrix_from_file(file_path: str) -> SparseMatrix:
         except ValueError:
             raise ValueError("Input file has wrong format: entries must be integers")
 
+        # ✅ Corrected Column Index Validation
         if row < 0 or row >= numRows or col < 0 or col > numCols - 1:
-            raise IndexError(f"Row or Column index out of bounds: ({row}, {col})")
+            raise IndexError(f"Row or Column index out of bounds: ({row}, {col}). Expected column index range: 0 to {numCols - 1}")
 
         matrix.setElement(row, col, val)
 
