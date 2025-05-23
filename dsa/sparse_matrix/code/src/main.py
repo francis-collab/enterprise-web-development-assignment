@@ -7,14 +7,15 @@ def main():
     try:
         choice = int(input("Enter choice: "))
 
-        matrixA = SparseMatrix("/dsa/sparse_matrix/sample_inputs/matrixA.txt")
+        matrixA = SparseMatrix("/dsa/sparse_matrix/sample_inputs/easy_sample_01_2.txt")
         matrixB = SparseMatrix("/dsa/sparse_matrix/sample_inputs/matrixB.txt")
+
 
         if choice == 1:
             result = add_matrices(matrixA, matrixB)
             write_matrix_to_file(result, "/dsa/sparse_matrix/sample_outputs/sum_matrix.txt")
         elif choice == 2:
-            result = subtract_matrices(matrixA, matrixB)  # ✅ Fixed subtraction call
+            result = subtract_matrices(matrixA, matrixB)
             write_matrix_to_file(result, "/dsa/sparse_matrix/sample_outputs/diff_matrix.txt")
         elif choice == 3:
             result = multiply_matrices(matrixA, matrixB)
