@@ -3,28 +3,25 @@ from sparse_matrix import SparseMatrix
 from matrix_operations import add_matrices, subtract_matrices, multiply_matrices
 
 class TestMatrixOperations(unittest.TestCase):
-    def test_addition(self):
-        matrixA = SparseMatrix("sample_inputs/matrixA.txt")
-        matrixB = SparseMatrix("sample_inputs/matrixB.txt")
-        result = add_matrices(matrixA, matrixB)
+    def setUp(self):
+        self.matrixA = SparseMatrix(3, 3)
+        self.matrixB = SparseMatrix(3, 3)
+        self.matrixA.setElement(0, 1, 5)
+        self.matrixB.setElement(0, 1, 3)
 
-        self.assertEqual(result.get_element(0, 1), 5 + (-2))  # Expected sum
+    def test_add_matrices(self):
+        result = add_matrices(self.matrixA, self.matrixB)
+        self.assertEqual(result.getElement(0, 1), 8)
 
-    def test_subtraction(self):
-        matrixA = SparseMatrix("sample_inputs/matrixA.txt")
-        matrixB = SparseMatrix("sample_inputs/matrixB.txt")
-        result = subtract_matrices(matrixA, matrixB)
+    def test_subtract_matrices(self):
+        result = subtract_matrices(self.matrixA, self.matrixB)
+        self.assertEqual(result.getElement(0, 1), 2)
 
-        self.assertEqual(result.get_element(0, 1), 5 - (-2))  # Expected difference
+    def test_multiply_matrices(self):
+        matrixC = SparseMatrix(3, 3)
+        matrixC.setElement(1, 2, 4)
+        result = multiply_matrices(self.matrixA, matrixC)
+        self.assertEqual(result.getElement(0, 2), 20)  # 5 * 4
 
-    def test_multiplication(self):
-        matrixA = SparseMatrix("sample_inputs/matrixA.txt")
-        matrixB = SparseMatrix("sample_inputs/matrixB.txt")
-        result = multiply_matrices(matrixA, matrixB)
-
-        # Verify known multiplication results based on matrix multiplication rules
-        self.assertEqual(result.get_element(1, 2), matrixA.get_element(1, 2) * matrixB.get_element(2, 2))  
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
-
