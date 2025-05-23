@@ -1,3 +1,4 @@
+from sparse_matrix import SparseMatrix
 def main():
     print("Choose an operation:")
     print("1. Addition")
