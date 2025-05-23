@@ -1,6 +1,6 @@
 # matrix_operations.py
 
-from sparse_matrix import SparseMatrix
+from dsa.sparse_matrix.code.src.sparse_matrix import SparseMatrix
 
 def add_matrices(m1: SparseMatrix, m2: SparseMatrix) -> SparseMatrix:
     if m1.numRows != m2.numRows or m1.numCols != m2.numCols:

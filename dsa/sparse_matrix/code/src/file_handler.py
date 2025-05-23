@@ -1,6 +1,6 @@
 # file_handler.py
 
-from sparse_matrix import SparseMatrix
+from dsa.sparse_matrix.code.src.sparse_matrix import SparseMatrix
 
 def read_matrix_from_file(file_path: str) -> SparseMatrix:
     try:
