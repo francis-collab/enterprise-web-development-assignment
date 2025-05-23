@@ -1,9 +1,11 @@
+# file_handler.py
+
 from sparse_matrix import SparseMatrix
 
 def read_matrix_from_file(file_path: str) -> SparseMatrix:
     try:
         with open(file_path, 'r') as f:
-            lines = f.readlines()
+            lines = [line.strip() for line in f if line.strip()]
     except FileNotFoundError:
         raise FileNotFoundError(f"File not found: {file_path}")
 
@@ -13,16 +15,12 @@ def read_matrix_from_file(file_path: str) -> SparseMatrix:
     try:
         numRows = int(lines[0].split('=')[1].strip())
         numCols = int(lines[1].split('=')[1].strip())
-    except:
+    except Exception:
         raise ValueError("Invalid rows/cols format")
 
     matrix = SparseMatrix(numRows, numCols)
 
     for line in lines[2:]:
-        line = line.strip()
-        if not line:
-            continue
-
         if not (line.startswith('(') and line.endswith(')')):
             raise ValueError("Input file has wrong format: missing valid parentheses")
 
@@ -37,15 +35,8 @@ def read_matrix_from_file(file_path: str) -> SparseMatrix:
         except ValueError:
             raise ValueError("Input file has wrong format: entries must be integers")
 
-        row -= 1
-        col -= 1
-
-        print(f"Parsed indices (before adjusting): row={row+1}, col={col+1}")
-        print(f"Adjusted indices (0-based): row={row}, col={col}")
-        print(f"Matrix dimensions: rows={numRows}, cols={numCols}")
-
         if row < 0 or row >= numRows or col < 0 or col >= numCols:
-            raise IndexError(f"Row or Column index out of bounds: ({row+1}, {col+1})")
+            raise IndexError(f"Row or Column index out of bounds: ({row}, {col})")
 
         matrix.setElement(row, col, val)
 
